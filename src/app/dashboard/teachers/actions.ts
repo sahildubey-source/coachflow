@@ -13,6 +13,7 @@ async function getCurrentCoachingId(supabase: any) {
 export async function getTeachers() {
   try {
     const supabase = await createClient()
+    if (!supabase) return { success: false, error: 'Supabase client not initialized', data: [] }
     const coachingId = await getCurrentCoachingId(supabase)
 
     // Fetch members who are 'teacher'

@@ -5,6 +5,8 @@ import { revalidatePath } from 'next/cache'
 
 export async function checkSuperAdmin() {
   const supabase = await createClient()
+  if (!supabase) return { isSuperAdmin: false }
+  
   const { data: user } = await supabase.auth.getUser()
   
   if (!user?.user) return { isSuperAdmin: false }
@@ -24,6 +26,7 @@ export async function checkSuperAdmin() {
 export async function getGlobalStats() {
   try {
     const supabase = await createClient()
+    if (!supabase) return { success: false, error: 'Supabase client not initialized' }
     
     // We use service role to bypass RLS for aggregate super_admin stats 
     // OR we can just rely on the super_admin RLS bypass if configured correctly.
@@ -52,6 +55,7 @@ export async function getGlobalStats() {
 export async function getAllCoachings() {
   try {
     const supabase = await createClient()
+    if (!supabase) return { success: true, data: [] }
     
     const { data, error } = await supabase
       .from('coachings')
@@ -75,6 +79,7 @@ export async function getAllCoachings() {
 export async function toggleCoachingStatus(coachingId: string, currentStatus: boolean) {
   try {
     const supabase = await createClient()
+    if (!supabase) return { success: false, error: 'Supabase client not initialized' }
     
     const { error } = await supabase
       .from('coachings')
